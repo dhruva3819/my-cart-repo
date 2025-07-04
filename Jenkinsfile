@@ -1,12 +1,20 @@
 pipeline {
     agent any
-
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                echo "***** coming from GitHub repo *****"
-                echo "***** Building from scm *****"
+                echo "**** Coming from Build stage *********"
+            }
+        }
+        stage ('grovystage') {
+            steps {
+                // i want to define a variable
+                // def variablename = "value"
+                def course = "k8s"
+                println("Tthanks for enrolling to ${course} course")
             }
         }
     }
 }
+
+// ${course} , ${env,course}, ${params,course}
