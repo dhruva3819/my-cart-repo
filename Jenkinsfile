@@ -8,10 +8,14 @@ pipeline {
         }
         stage ('grovystage') {
             steps {
-                // i want to define a variable
+                script {
+                    // i want to define a variable
                 // def variablename = "value"
                 def course = "k8s"
                 println("Tthanks for enrolling to ${course} course")
+
+                }
+                
             }
         }
     }
