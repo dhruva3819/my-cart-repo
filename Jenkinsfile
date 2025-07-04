@@ -3,13 +3,14 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                retry(3) {
-                    echo "Welcome to jenkins pipeline"
-                    error "This will give give some error"
+                script {
+                    retry(3) {
+                        echo "Welcome to jenkins pipeline"
+                        error "This will give some error"
+                    }
+                    // This won't be executed if retry fails
+                    echo "***** Printing after multiple retries ******"
                 }
-                echo "***** Printing after mulitiple retries ******"
-            }
-                
             }
         }
     }
