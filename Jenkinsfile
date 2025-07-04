@@ -11,8 +11,14 @@ pipeline {
                 script {
                     // i want to define a variable
                 // def variablename = "value"
-                def course = "k8s"
-                println("Tthanks for enrolling to ${course} course")
+                def course == "k8s"
+
+                // if condition
+                if (course == "k8s")
+                println("thanks for enrolling")
+                else
+                    println("do enroll for k8s")
+                //println("Thanks for enrolling to ${course} course")
 
                 }
                 
@@ -20,5 +26,7 @@ pipeline {
         }
     }
 }
+
+// ${course} , ${env,course}, ${params,course}
 
 // ${course} , ${env,course}, ${params,course}
