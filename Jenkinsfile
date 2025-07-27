@@ -10,6 +10,8 @@ pipeline {
 
     environment {
         APPLICATION_NAME = "eureka"
+        DOCKER_IMAGE_NAME = "your-dockerhub-username/eureka" // Replace with your Docker image name
+        DOCKER_REGISTRY = "docker.io"  // Replace with your Docker registry if using a private one
     }
 
     stages {
@@ -20,20 +22,27 @@ pipeline {
             }
         }
 
-        stage('Sonar Scan') {
+        stage('Build & Deploy Docker Image') {
             steps {
-                echo "********** Starting SonarQube scan ************"
-                sh """
-                    mvn clean verify sonar:sonar \
-                    -Dsonar.projectKey=i27-eureka
-                """
-            }
-        }
+                echo "************* Building Docker Image ***************"
+                script {
+                    // Build Docker image
+                    sh """
+                        docker build -t ${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} .
+                    """
 
-        stage('BuildFormat') {
-            steps {
-                echo '************ Docker build and push stage ************'
-                // Add Docker build and push commands here
+                    // Log in to Docker registry
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                        """
+                    }
+
+                    // Push Docker image to registry
+                    sh """
+                        docker push ${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}
+                    """
+                }
             }
         }
     }
